@@ -68,7 +68,7 @@ func init() {
 
 	// Register the subcommands:
 	root.AddCommand(completion.Cmd)
-	root.AddCommand(create.Cmd)
+	root.AddCommand(create.Create())
 	root.AddCommand(describe.Cmd)
 	root.AddCommand(dlt.Cmd)
 	root.AddCommand(docs.Cmd)

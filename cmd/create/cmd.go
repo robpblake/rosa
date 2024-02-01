@@ -19,21 +19,7 @@ package create
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/openshift/rosa/cmd/create/accountroles"
-	"github.com/openshift/rosa/cmd/create/admin"
-	"github.com/openshift/rosa/cmd/create/autoscaler"
-	"github.com/openshift/rosa/cmd/create/cluster"
-	"github.com/openshift/rosa/cmd/create/dnsdomains"
-	"github.com/openshift/rosa/cmd/create/idp"
 	"github.com/openshift/rosa/cmd/create/kubeletconfig"
-	"github.com/openshift/rosa/cmd/create/machinepool"
-	"github.com/openshift/rosa/cmd/create/ocmrole"
-	"github.com/openshift/rosa/cmd/create/oidcconfig"
-	"github.com/openshift/rosa/cmd/create/oidcprovider"
-	"github.com/openshift/rosa/cmd/create/operatorroles"
-	"github.com/openshift/rosa/cmd/create/service"
-	"github.com/openshift/rosa/cmd/create/tuningconfigs"
-	"github.com/openshift/rosa/cmd/create/userrole"
 	"github.com/openshift/rosa/pkg/arguments"
 	"github.com/openshift/rosa/pkg/interactive/confirm"
 )
@@ -46,31 +32,71 @@ var Cmd = &cobra.Command{
 }
 
 func init() {
-	Cmd.AddCommand(accountroles.Cmd)
-	Cmd.AddCommand(admin.Cmd)
-	Cmd.AddCommand(cluster.Cmd)
-	Cmd.AddCommand(idp.Cmd)
-	Cmd.AddCommand(machinepool.Cmd)
-	Cmd.AddCommand(oidcconfig.Cmd)
-	Cmd.AddCommand(oidcprovider.Cmd)
-	Cmd.AddCommand(operatorroles.Cmd)
-	Cmd.AddCommand(userrole.Cmd)
-	Cmd.AddCommand(ocmrole.Cmd)
-	Cmd.AddCommand(service.Cmd)
-	Cmd.AddCommand(tuningconfigs.Cmd)
-	Cmd.AddCommand(dnsdomains.Cmd)
-	Cmd.AddCommand(autoscaler.Cmd)
-	Cmd.AddCommand(kubeletconfig.Cmd)
+	//Cmd.AddCommand(accountroles.Cmd)
+	//Cmd.AddCommand(admin.Cmd)
+	//Cmd.AddCommand(cluster.Cmd)
+	//Cmd.AddCommand(idp.Cmd)
+	//Cmd.AddCommand(machinepool.Cmd)
+	//Cmd.AddCommand(oidcconfig.Cmd)
+	//Cmd.AddCommand(oidcprovider.Cmd)
+	//Cmd.AddCommand(operatorroles.Cmd)
+	//Cmd.AddCommand(userrole.Cmd)
+	//Cmd.AddCommand(ocmrole.Cmd)
+	//Cmd.AddCommand(service.Cmd)
+	//Cmd.AddCommand(tuningconfigs.Cmd)
+	//Cmd.AddCommand(dnsdomains.Cmd)
+	//Cmd.AddCommand(autoscaler.Cmd)
+	//Cmd.AddCommand(kubeletconfig.Cmd)
+	//
+	//flags := Cmd.PersistentFlags()
+	//arguments.AddProfileFlag(flags)
+	//arguments.AddRegionFlag(flags)
+	//confirm.AddFlag(flags)
+	//
+	//globallyAvailableCommands := []*cobra.Command{
+	//	accountroles.Cmd, operatorroles.Cmd,
+	//	userrole.Cmd, ocmrole.Cmd,
+	//	oidcprovider.Cmd,
+	//}
+	//arguments.MarkRegionHidden(Cmd, globallyAvailableCommands)
+}
+
+// Sanity check that the command meets our requirements:
+
+func RegisterCommand(parent *cobra.Command, child *cobra.Command) {
+	if child.Run == nil {
+		// TODO - fail, you haven't set the run function
+	}
+
+	if child.Use == "" {
+		// TODO - fail, you haven't set use
+	}
+
+	if child.Long == "" {
+
+	}
+
+	if child.Short == "" {
+
+	}
+
+	// All good, register the command with the parent
+	parent.AddCommand(child)
+}
+
+func Create() *cobra.Command {
+	create := &cobra.Command{
+		Use:     "create",
+		Aliases: []string{"add"},
+		Short:   "Create a resource from stdin",
+		Long:    "Create a resource from stdin",
+	}
 
 	flags := Cmd.PersistentFlags()
 	arguments.AddProfileFlag(flags)
 	arguments.AddRegionFlag(flags)
 	confirm.AddFlag(flags)
 
-	globallyAvailableCommands := []*cobra.Command{
-		accountroles.Cmd, operatorroles.Cmd,
-		userrole.Cmd, ocmrole.Cmd,
-		oidcprovider.Cmd,
-	}
-	arguments.MarkRegionHidden(Cmd, globallyAvailableCommands)
+	RegisterCommand(create, kubeletconfig.Create())
+	return create
 }
